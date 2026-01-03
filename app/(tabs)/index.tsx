@@ -16,7 +16,6 @@ export default function Index() {
     error: moviesError
   } = useFetch(()=> fetchMovies( {query : ''}))
 
-
   return (
     <View style={styles.container}>
       <Image source={images.bg} style={styles.background} />
@@ -39,6 +38,8 @@ export default function Index() {
               <SearchBar
                   placeholder="Search for a movie"
                   onPress={() => router.push("/search")}
+                  onChangeText={text => ''}
+                  value=''
                 />
                 <Text className="text-lg text-white font-bold mt-5 mb-3">Latest Movies</Text>
                 <FlatList
