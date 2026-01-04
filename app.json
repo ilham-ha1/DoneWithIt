@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Moview Done With It",
+    "name": "Movie Done With It",
     "slug": "DoneWithIt",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,9 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "bundleIdentifier": "com.dwi.movie",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.dwi.movie",
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
         "foregroundImage": "./assets/images/logo.png"

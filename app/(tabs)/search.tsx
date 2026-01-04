@@ -4,13 +4,12 @@ import { View, Text, ActivityIndicator, FlatList, Image } from "react-native";
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
 
-// import useFetch from "@/services/usefetch";
 import { fetchMovies } from "@/services/api";
-// import { updateSearchCount } from "@/services/appwrite";
 
 import SearchBar from "@/components/SearchBar";
 import MovieDisplayCard from "@/components/MovieCard";
 import useFetch from "@/services/useFetch";
+import {updateSearchCount} from "@/services/appwrite";
 
 const Search = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -28,9 +27,9 @@ const Search = () => {
         false
     );
 
-    // const handleSearch = (text: string) => {
-    //     setSearchQuery(text);
-    // };
+    const handleSearch = (text: string) => {
+        setSearchQuery(text);
+    };
 
     // Debounced search effect
     useEffect(() => {
@@ -40,15 +39,25 @@ const Search = () => {
 
                 // Call updateSearchCount only if there are results
                 if (movies?.length! > 0 && movies?.[0]) {
-                    // await updateSearchCount(searchQuery, movies[0]);
+                    console.log("movies", movies);
+                    await updateSearchCount(searchQuery, movies[0]);
+                }else{
+                    console.log(`movies else ${movies?.length! > 0} ${movies?.[0]}`, movies);
                 }
             } else {
                 reset();
+                console.log("movies else else", movies);
             }
         }, 500);
 
         return () => clearTimeout(timeoutId);
     }, [searchQuery]);
+
+    useEffect(() => {
+        if (movies?.length! > 0 && movies?.[0]) {
+            updateSearchCount(searchQuery, movies[0]);
+        }
+    }, [movies]);
 
     return (
         <View className="flex-1 bg-primary">
