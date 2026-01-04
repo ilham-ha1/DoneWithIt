@@ -12,6 +12,7 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { icons } from "@/constants/icons";
 import { fetchMovieDetails } from "@/services/api";
 import useFetch from "@/services/useFetch";
+import { useMovieStore } from "@/store/useMovieStore";
 
 interface MovieInfoProps {
     label: string;
@@ -31,6 +32,7 @@ const Details = () => {
     const router = useRouter();
     const { id } = useLocalSearchParams();
     const insets = useSafeAreaInsets();
+    const { isSaved, toggleSave } = useMovieStore();
 
     const { data: movie, loading } = useFetch(() =>
         fetchMovieDetails(id as string)
@@ -55,11 +57,15 @@ const Details = () => {
                         resizeMode="stretch"
                     />
 
-                    <TouchableOpacity className="absolute bottom-5 right-5 rounded-full size-14 bg-white flex items-center justify-center">
+                    <TouchableOpacity
+                        className="absolute bottom-5 right-5 rounded-full size-14 bg-white flex items-center justify-center"
+                        onPress={() => movie && toggleSave(movie)}
+                    >
                         <Image
-                            source={icons.play}
+                            source={isSaved(movie?.id ?? 0) ? icons.save : icons.play}
                             className="w-6 h-7 ml-1"
                             resizeMode="stretch"
+                            tintColor={isSaved(movie?.id ?? 0) ? "#151312" : undefined}
                         />
                     </TouchableOpacity>
                 </View>
