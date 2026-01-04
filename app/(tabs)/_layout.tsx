@@ -1,8 +1,9 @@
 import { Tabs } from "expo-router";
-import {Image, ImageBackground, Text, View} from "react-native";
+import { Image, ImageBackground, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { icons } from "@/constants/icons";
-import {images} from "@/constants/images";
+import { images } from "@/constants/images";
 
 const TabIcon = ({focused, icon, title} : any) => {
     if(focused){
@@ -33,6 +34,8 @@ const TabIcon = ({focused, icon, title} : any) => {
 }
 
 const _layout = () => {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
         screenOptions={{
@@ -47,7 +50,7 @@ const _layout = () => {
                 backgroundColor: "#0f0D23",
                 borderRadius: 50,
                 marginHorizontal: 20,
-                marginBottom: 48,
+                marginBottom: insets.bottom > 0 ? insets.bottom : 20,
                 height: 48,
                 paddingTop: 1,
                 position: "absolute",
@@ -96,7 +99,7 @@ const _layout = () => {
                 ),
             }}
         />
-    </Tabs>
+      </Tabs>
   )
 }
 

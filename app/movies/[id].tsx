@@ -1,13 +1,13 @@
-import {
-    View,
-    Text,
-    Image,
-    ActivityIndicator,
-    ScrollView,
-    TouchableOpacity,
-} from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+    ActivityIndicator,
+    Image,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { icons } from "@/constants/icons";
 import { fetchMovieDetails } from "@/services/api";
@@ -30,6 +30,7 @@ const MovieInfo = ({ label, value }: MovieInfoProps) => (
 const Details = () => {
     const router = useRouter();
     const { id } = useLocalSearchParams();
+    const insets = useSafeAreaInsets();
 
     const { data: movie, loading } = useFetch(() =>
         fetchMovieDetails(id as string)
@@ -114,7 +115,8 @@ const Details = () => {
             </ScrollView>
 
             <TouchableOpacity
-                className="absolute bottom-5 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
+                className="absolute bottom-0 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
+                style={{ marginBottom: insets.bottom  }}
                 onPress={router.back}
             >
                 <Image
