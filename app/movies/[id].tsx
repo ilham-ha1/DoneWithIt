@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
     ActivityIndicator,
@@ -10,9 +11,8 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { icons } from "@/constants/icons";
-import { fetchMovieDetails } from "@/services/api";
-import useFetch from "@/services/useFetch";
 import { useMovieStore } from "@/store/useMovieStore";
+import { useMovieDataStore } from "@/store/useMovieDataStore";
 
 interface MovieInfoProps {
     label: string;
@@ -34,9 +34,19 @@ const Details = () => {
     const insets = useSafeAreaInsets();
     const { isSaved, toggleSave } = useMovieStore();
 
-    const { data: movie, loading } = useFetch(() =>
-        fetchMovieDetails(id as string)
-    );
+    const {
+        movieDetail: movie,
+        movieDetailLoading: loading,
+        movieDetailError: error,
+        currentMovieId,
+        fetchMovieDetail,
+    } = useMovieDataStore();
+
+    useEffect(() => {
+        if (id && id !== currentMovieId) {
+            fetchMovieDetail(id as string);
+        }
+    }, [id, currentMovieId, fetchMovieDetail]);
 
     if (loading)
         return (
@@ -122,7 +132,7 @@ const Details = () => {
 
             <TouchableOpacity
                 className="absolute bottom-0 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
-                style={{ marginBottom: insets.bottom  }}
+                style={{ marginBottom: insets.bottom }}
                 onPress={router.back}
             >
                 <Image

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface SavedMovie {
   adult: boolean;
@@ -94,7 +95,7 @@ export const useMovieStore = create<MovieStore>()(
     }),
     {
       name: 'movie-storage',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => AsyncStorage),
     }
   )
 );

@@ -1,31 +1,26 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { View, Text, ActivityIndicator, FlatList, Image } from "react-native";
 
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
 
 import { fetchMovies } from "@/services/api";
+import { updateSearchCount } from "@/services/appwrite";
 
 import SearchBar from "@/components/SearchBar";
 import MovieDisplayCard from "@/components/MovieCard";
-import useFetch from "@/services/useFetch";
-import {updateSearchCount} from "@/services/appwrite";
+import { useMovieDataStore } from "@/store/useMovieDataStore";
 
 const Search = () => {
-    const [searchQuery, setSearchQuery] = useState("");
-
     const {
-        data: movies,
-        loading,
-        error,
-        refetch: loadMovies,
-        reset,
-    } = useFetch(
-        () => fetchMovies(
-            { query: searchQuery }
-        ),
-        false
-    );
+        movies,
+        moviesLoading: loading,
+        moviesError: error,
+        searchQuery,
+        setSearchQuery,
+        fetchMoviesList,
+        clearMovies,
+    } = useMovieDataStore();
 
     const handleSearch = (text: string) => {
         setSearchQuery(text);
@@ -35,17 +30,17 @@ const Search = () => {
     useEffect(() => {
         const timeoutId = setTimeout(async () => {
             if (searchQuery.trim()) {
-                await loadMovies();
+                await fetchMoviesList();
 
                 // Call updateSearchCount only if there are results
                 if (movies?.length! > 0 && movies?.[0]) {
                     console.log("movies", movies);
                     await updateSearchCount(searchQuery, movies[0]);
-                }else{
+                } else {
                     console.log(`movies else ${movies?.length! > 0} ${movies?.[0]}`, movies);
                 }
             } else {
-                reset();
+                clearMovies();
                 console.log("movies else else", movies);
             }
         }, 500);
@@ -69,7 +64,7 @@ const Search = () => {
 
             <FlatList
                 className="px-5"
-                data={movies as Movie[]}
+                data={movies}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => <MovieDisplayCard {...item} />}
                 numColumns={3}
@@ -89,8 +84,7 @@ const Search = () => {
                             <SearchBar
                                 placeholder="Search movies..."
                                 value={searchQuery}
-                                // onChangeText={handleSearch}
-                                onChangeText={(text : string) => setSearchQuery(text)}
+                                onChangeText={handleSearch}
                             />
                         </View>
 
