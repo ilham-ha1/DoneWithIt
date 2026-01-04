@@ -1,4 +1,5 @@
 import { Client, Databases, ID, Query } from "react-native-appwrite";
+import { Movie } from "../src/domain/entities/Movie";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
@@ -33,7 +34,7 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
                 movie_id: movie.id,
                 title: movie.title,
                 count: 1,
-                poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+                poster_url: `https://image.tmdb.org/t/p/w500${movie.posterPath}`,
             });
         }
     } catch (error) {

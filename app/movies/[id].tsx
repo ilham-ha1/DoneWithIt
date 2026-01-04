@@ -61,7 +61,7 @@ const Details = () => {
                 <View>
                     <Image
                         source={{
-                            uri: `https://image.tmdb.org/t/p/w500${movie?.poster_path}`,
+                            uri: `https://image.tmdb.org/t/p/w500${movie?.posterPath}`,
                         }}
                         className="w-full h-[550px]"
                         resizeMode="stretch"
@@ -84,48 +84,43 @@ const Details = () => {
                     <Text className="text-white font-bold text-xl">{movie?.title}</Text>
                     <View className="flex-row items-center gap-x-1 mt-2">
                         <Text className="text-light-200 text-sm">
-                            {movie?.release_date?.split("-")[0]} •
+                            {movie?.formattedReleaseYear} •
                         </Text>
-                        <Text className="text-light-200 text-sm">{movie?.runtime}m</Text>
+                        <Text className="text-light-200 text-sm">{movie?.formattedRuntime}</Text>
                     </View>
 
                     <View className="flex-row items-center bg-dark-100 px-2 py-1 rounded-md gap-x-1 mt-2">
                         <Image source={icons.star} className="size-4" />
 
                         <Text className="text-white font-bold text-sm">
-                            {Math.round(movie?.vote_average ?? 0)}/10
+                            {Math.round(movie?.voteAverage ?? 0)}/10
                         </Text>
 
                         <Text className="text-light-200 text-sm">
-                            ({movie?.vote_count} votes)
+                            ({movie?.voteCount} votes)
                         </Text>
                     </View>
 
                     <MovieInfo label="Overview" value={movie?.overview} />
                     <MovieInfo
                         label="Genres"
-                        value={movie?.genres?.map((g) => g.name).join(" • ") || "N/A"}
+                        value={movie?.genresList}
                     />
 
                     <View className="flex flex-row justify-between w-1/2">
                         <MovieInfo
                             label="Budget"
-                            value={`$${(movie?.budget ?? 0) / 1_000_000} million`}
+                            value={movie?.formattedBudget}
                         />
                         <MovieInfo
                             label="Revenue"
-                            value={`$${Math.round(
-                                (movie?.revenue ?? 0) / 1_000_000
-                            )} million`}
+                            value={movie?.formattedRevenue}
                         />
                     </View>
 
                     <MovieInfo
                         label="Production Companies"
-                        value={
-                            movie?.production_companies?.map((c) => c.name).join(" • ") ||
-                            "N/A"
-                        }
+                        value={movie?.productionCompaniesList}
                     />
                 </View>
             </ScrollView>
